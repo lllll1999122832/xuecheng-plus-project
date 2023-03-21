@@ -1,0 +1,9 @@
+#微服务配置
+spring:
+  application:
+    name: system-api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.101.128:3306/xuecheng_system?serverTimezone=UTC&userUnicode=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 12345

@@ -1,0 +1,40 @@
+### 查询课程信息
+//把固定环境http localhost:63040换成 配置环境 http-client.env中的
+//要把环境切换成dev 因为json中配的就是
+POST {{content_host}}/content/course/list?pageNum=1&pageSize=10
+Content-Type: application/json
+
+{
+  "auditStatus": "",
+  "courseName": "java",
+  "publishStatus": ""
+}
+
+
+### 查询课程分类
+GET {{content_host}}/content/course-category/tree-nodes
+
+### 新增课程信息
+POST {{content_host}}/content/course
+Content-Type: application/json
+
+{
+  "charge": "201000",
+  "price": 10,
+  "originalPrice":100,
+  "qq": "22333",
+  "wechat": "223344",
+  "phone": "13333333",
+  "validDays": 365,
+  "mt": "1-1",
+  "st": "1-1-1",
+  "name": "",
+  "pic": "sadas",
+  "teachmode": "200002",
+  "users": "初级人员",
+  "tags": "汤",
+  "grade": "204001",
+  "description": ""
+}
+### 根据id查询信息
+GET {{content_host}}/content/course/40

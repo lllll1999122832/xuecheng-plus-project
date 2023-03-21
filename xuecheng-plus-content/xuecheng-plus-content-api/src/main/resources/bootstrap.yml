@@ -1,0 +1,31 @@
+server:
+  servlet:
+    context-path: /content
+  port: 63040
+#微服务配置
+spring:
+  application:
+    name: content-api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.101.128:3306/content?serverTimezone=UTC&userUnicode=true&useSSL=false&
+    username: root
+    password: 12345
+# 日志文件配置路径
+mybatis-plus:
+  configuration:
+    # 日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: delFlag #配置逻辑删除字段
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+#      id-type: auto
+swagger:
+  title: "学成在线内容管理系统"
+  description: "内容系统管理系统对课程相关信息进行管理"
+  base-package: tang.xuechengpluscontentapi.content
+  enabled: true
+  version: 1.0.0
+
