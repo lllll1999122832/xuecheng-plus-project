@@ -1,4 +1,4 @@
-package com.xuecheng.system.config;
+package tang.system.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

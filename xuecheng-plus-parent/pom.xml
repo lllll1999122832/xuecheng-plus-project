@@ -119,6 +119,13 @@
                 <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatis-plus-boot-starter.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
             <!-- 工具类管理 -->
             <dependency>

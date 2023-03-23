@@ -1,7 +1,11 @@
 package tang.content.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import tang.content.dto.SaveTeachplanDto;
+import tang.content.dto.TeachplanDto;
 import tang.content.po.Teachplan;
+
+import java.util.List;
 
 /**
 * @author 曾梦想仗剑走天涯
@@ -10,4 +14,7 @@ import tang.content.po.Teachplan;
 */
 public interface TeachplanService extends IService<Teachplan> {
 
+    List<TeachplanDto> getTreeNodes(Long courseId);
+
+    void saveTeachPlan(SaveTeachplanDto saveTeachplanDto);
 }

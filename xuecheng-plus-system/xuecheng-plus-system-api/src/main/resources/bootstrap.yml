@@ -1,23 +1,53 @@
-server:
-  servlet:
-    context-path: /system
-  port: 63110
+#server:
+#  servlet:
+#    context-path: /system
+#  port: 63110
 # 日志文件配置路径
 #logging:
-#  config: classpath:log4j2-dev.xml
-mybatis-plus:
-  configuration:
-    # 日志
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  global-config:
-    db-config:
-      logic-delete-field: delFlag #配置逻辑删除字段
-      logic-delete-value: 1
-      logic-not-delete-value: 0
+##  config: classpath:log4j2-dev.xml
+#mybatis-plus:
+#  configuration:
+#    # 日志
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  global-config:
+#    db-config:
+#      logic-delete-field: delFlag #配置逻辑删除字段
+#      logic-delete-value: 1
+#      logic-not-delete-value: 0
 # swagger 文档配置
-swagger:
-  title: "学成在线系统管理"
-  description: "系统管理接口"
-  base-package: com.xuecheng.system
-  enabled: true
-  version: 1.0.0
+#swagger:
+#  title: "学成在线系统管理"
+#  description: "系统管理接口"
+#  base-package: com.xuecheng.system
+#  enabled: true
+#  version: 1.0.0
+spring:
+  cloud:
+    nacos:
+      server-addr: 192.168.101.128:8848
+      discovery:
+        namespace: b31ce694-f1d6-4e94-a9e3-23967cae5233
+        group: xuecheng-plus-project
+      config: #服务注册相关配置
+        namespace: b31ce694-f1d6-4e94-a9e3-23967cae5233
+        group: xuecheng-plus-project
+        file-extension: yaml
+        refresh-enabled: true
+        shared-configs:
+          - data-id: swagger-${spring.profiles.active}.yaml
+            group: xuecheng-plus-common
+            refresh: true
+          - data-id: logging-${spring.profiles.active}.yaml
+            group: xuecheng-plus-common
+            refresh: true
+  #    inetutils:
+#      ignored-interfaces: 'VMware Virtual Ethernet Adapter for VMnet1,VMware Virtual Ethernet Adapter for VMnet8'
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://192.168.101.128:3306/xuecheng_system?serverTimezone=UTC&userUnicode=true&useSSL=false&allowPublicKeyRetrieval=true
+#    username: root
+#    password: 12345
+  application:
+    name: system-api
+  profiles:
+    active: dev

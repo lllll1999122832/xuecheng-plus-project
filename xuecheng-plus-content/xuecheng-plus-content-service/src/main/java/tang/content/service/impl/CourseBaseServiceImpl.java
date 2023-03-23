@@ -156,17 +156,19 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
         }
         //数据合法性校验
         //业务逻辑校验
-        //本机构只能修改本机构的课程
-        if(!course.getCompanyId().equals(companyId)){
-            throw  new XueChengPlusException("本机构只能修改本机构的课程");
-        }
+//        //  todo 本机构只能修改本机构的课程
+//        if(!course.getCompanyId().equals(companyId)){
+//            throw  new XueChengPlusException("本机构只能修改本机构的课程");
+//        }
         //封装数据
         CourseBase courseBase = BeanCopyUtils.copyBean(editCourseDto, CourseBase.class);
         //更新数据库
-         if (this.updateById(courseBase)) {
+         if (!this.updateById(courseBase)) {
             throw  new XueChengPlusException("更新失败");
         }
-
+         //更新营销表
+        CourseMarket courseMarket = BeanCopyUtils.copyBean(editCourseDto, CourseMarket.class);
+        saveCourseMarket(courseMarket);
         return getCourseBaseInfo(courseBase.getId());
     }
 

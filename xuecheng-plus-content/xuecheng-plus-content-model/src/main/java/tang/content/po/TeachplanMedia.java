@@ -3,8 +3,10 @@ package tang.content.po;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
@@ -12,10 +14,13 @@ import lombok.Data;
  */
 @Data
 @TableName("teachplan_media")
+@AllArgsConstructor
+@NoArgsConstructor
 public class TeachplanMedia implements Serializable {
     /**
      * 主键
      */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
@@ -41,6 +46,7 @@ public class TeachplanMedia implements Serializable {
     /**
      *
      */
+    @TableField(fill = FieldFill.INSERT)
     private Date createDate;
 
     /**

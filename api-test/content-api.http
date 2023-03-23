@@ -38,3 +38,6 @@ Content-Type: application/json
 }
 ### 根据id查询信息
 GET {{content_host}}/content/course/40
+
+### 根据id查询课程信息
+GET {{gateway_host}}/content/teachplan/117/tree-nodes
