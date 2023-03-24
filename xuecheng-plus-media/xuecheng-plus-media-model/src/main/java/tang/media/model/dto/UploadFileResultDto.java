@@ -9,7 +9,7 @@ import tang.media.model.po.MediaFiles;
  * 文件上传成功之后传递的实体类
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@AllArgsConstructor
+//@NoArgsConstructor
 public class UploadFileResultDto extends MediaFiles {
 }

@@ -7,6 +7,7 @@ import tang.xuechengplusbase.base.model.PageParams;
 import tang.xuechengplusbase.base.model.PageResult;
 import tang.media.model.dto.QueryMediaParamsDto;
 import tang.media.model.po.MediaFiles;
+import tang.xuechengplusbase.base.model.RestResponse;
 
 /**
  * @description 媒资文件管理业务类
@@ -29,10 +30,20 @@ public interface MediaFileService {
     /**
      * 上传文件
      * @param companyId
-     * @param filedata
+     * @param uploadFileParamsDto 参数
      * @param localFilePath 文件本地路径
      * @return
      */
 
     UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath);
+
+    //使他暴露出去,调用该对象为代理对象,这样可以使 @Transactional有效
+    public MediaFiles addMediaFilesToDb(Long companyId,String fileMd5,UploadFileParamsDto uploadFileParamsDto,String bucket,String objectName);
+
+    /**
+     * 在数据库中查询是否该数据存在
+     * @param fileMd5
+     * @return
+     */
+    RestResponse<Boolean> checkfile(String fileMd5);
 }

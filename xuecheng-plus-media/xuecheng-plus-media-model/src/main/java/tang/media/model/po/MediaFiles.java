@@ -80,13 +80,11 @@ public class MediaFiles implements Serializable {
     /**
      * 上传时间
      */
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createDate;
 
     /**
      * 修改时间
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime changeDate;
 
     /**

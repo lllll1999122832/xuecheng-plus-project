@@ -3,6 +3,7 @@ package tang.media;
 import com.j256.simplemagic.ContentInfo;
 import com.j256.simplemagic.ContentInfoUtil;
 import io.minio.*;
+import io.minio.errors.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
 import java.io.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 测试Minio的sdk
@@ -90,5 +97,37 @@ public class MinioTest {
             System.out.println("查询失败");
         }
     }
+    @Test
+    public void uploadChunk() throws IOException, ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        for (int i = 0; i < 8; i++) {
+            UploadObjectArgs testbucket = UploadObjectArgs.builder()
+                    .bucket("testbuckets") //确定桶
+                    .object("check/"+i)// 确定对象名 添加子目录
+                    .filename("C:\\Users\\31461\\Desktop\\JVM\\"+i) //自己文件
+//                    .contentType(mimeType)//默认根据扩展名确定文件内容类型，也可以指定
+                    .build();
+            //上传分块
+            minioClient.uploadObject(testbucket);
+            System.out.println(i+"上传成功");
+        }
+    }
+    //合并分块
+@Test
+    public void testMerge() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        //指定源文件
+    List<ComposeSource> sources=new ArrayList<>();
+    //指定分块文件信息
+    for (int i = 0; i < 8; i++) {
+        sources.add(ComposeSource.builder().bucket("testbuckets")
+                .object("check/"+i)
+                .build());
+    }
+        //只能合并后的ObjectName信息
+    ComposeObjectArgs testbuckets = ComposeObjectArgs.builder().bucket("testbuckets")
+            .object("haizeiwang.mp4")
+            .sources(sources)  //指定源文件
+    .build();
+    minioClient.composeObject(testbuckets);
+}
 
 }

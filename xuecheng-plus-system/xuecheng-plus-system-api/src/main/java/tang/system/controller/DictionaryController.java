@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 public class DictionaryController  {
 
-    @Autowired
+    @Autowired(required = false)
     private DictionaryService dictionaryService;
 
     @GetMapping("/dictionary/all")

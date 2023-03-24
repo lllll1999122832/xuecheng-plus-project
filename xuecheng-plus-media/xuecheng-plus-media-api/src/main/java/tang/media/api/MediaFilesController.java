@@ -3,6 +3,7 @@ package tang.media.api;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import tang.media.model.dto.UploadFileParamsDto;
 import tang.media.model.dto.UploadFileResultDto;
 import tang.xuechengplusbase.base.model.PageParams;
 import tang.xuechengplusbase.base.model.PageResult;
@@ -15,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @description 媒资文件管理接口
@@ -41,13 +45,25 @@ public class MediaFilesController {
     @ApiOperation("上传图片")
     @PostMapping(value = "/upload/coursefile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     //说明上传类型为复杂类型
-    public UploadFileResultDto upload(@RequestPart("filedata")MultipartFile filedata){
+    public UploadFileResultDto upload(@RequestPart("filedata")MultipartFile filedata) throws IOException {
+        UploadFileParamsDto uploadFileParamsDto=new UploadFileParamsDto();
+        //原始文件的名称
+        uploadFileParamsDto.setFilename(filedata.getOriginalFilename());
+        //文件的大小
+        uploadFileParamsDto.setFileSize(filedata.getSize());
+        //文件类型,先写死
+        uploadFileParamsDto.setFileType("001001");
+        //
      //已经接受到文件了
+        //创建一个临时文件
+        File tempFile=File.createTempFile("minio",".temp");
+        filedata.transferTo(tempFile);
      //@RequestPart 上传的文件参数名
         //调用mediaFileService方法
         Long companyId = 1232141425L;
-//        return mediaFileService.uploadFile(companyId,filedata,null);
-        return null;
+        //取出文件路径
+        String absolutePath = tempFile.getAbsolutePath();
+        return mediaFileService.uploadFile(companyId,uploadFileParamsDto,absolutePath);
     }
 
 }
