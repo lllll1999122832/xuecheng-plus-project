@@ -9,6 +9,8 @@ import tang.media.model.dto.QueryMediaParamsDto;
 import tang.media.model.po.MediaFiles;
 import tang.xuechengplusbase.base.model.RestResponse;
 
+import java.io.File;
+
 /**
  * @description 媒资文件管理业务类
  * @author Mr.M
@@ -46,4 +48,51 @@ public interface MediaFileService {
      * @return
      */
     RestResponse<Boolean> checkfile(String fileMd5);
+
+    /**
+     * 检查分块
+     * @param fileMd5
+     * @param chunk
+     * @return
+     */
+    RestResponse<Boolean> checkchunk(String fileMd5, int chunk);
+
+   /**
+    * 上传分块文件
+    * @param fileMd5
+    * @param chunk
+    * @return
+    */
+    RestResponse uploadchunk(String localChunkFilePath, String fileMd5, int chunk);
+
+    /**
+     * @description 合并分块
+     * @param companyId 机构id
+     * @param fileMd5 文件md5
+     * @param chunkTotal 分块总和
+     * @param uploadFileParamsDto 文件信息
+     * @return com.xuecheng.base.model.RestResponse
+     * @author Mr.M
+     * @date 2022/9/13 15:56
+     */
+    public RestResponse mergechunks(Long companyId,String fileMd5,int chunkTotal,UploadFileParamsDto uploadFileParamsDto);
+
+    /**
+     * 下载视频到本地
+     * @param bucket
+     * @param objectName
+     * @return
+     */
+    public File downloadFileFromMinIO(String bucket, String objectName);
+
+    /**
+     * 文件上传至minio
+     * @param localFilePath
+     * @param mimeType
+     * @param bucket
+     * @param objectName
+     * @return
+     */
+    public boolean addMediaFilesToMinIO(String localFilePath,String mimeType,String bucket, String objectName) ;
+
 }

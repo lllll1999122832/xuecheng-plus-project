@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tang.content.dto.BindTeachplanMediaDto;
 import tang.content.dto.SaveTeachplanDto;
 import tang.content.dto.TeachplanDto;
 import tang.content.service.TeachplanService;
@@ -34,4 +35,10 @@ public class TeachplanController {
         //难点在Service
         teachplanService.saveTeachPlan(saveTeachplanDto);
     }
+    @ApiOperation(value = "课程计划和媒资信息绑定")
+    @PostMapping("/teachplan/association/media")
+    public void associationMedia(@RequestBody BindTeachplanMediaDto bindTeachplanMediaDto){
+        teachplanService.associationMedia(bindTeachplanMediaDto);
+    }
+
 }

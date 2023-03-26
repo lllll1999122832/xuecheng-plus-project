@@ -94,7 +94,7 @@
             m1.media_fileName mediaFilename,
             m1.id teachplanMeidaId,
             m1.media_id mediaId
-        from teachplan one inner join teachplan two on one.id=two.parentid
+        from teachplan one left join  teachplan two on one.id=two.parentid
                            left join teachplan_media m1 on two.id = m1.teachplan_id
         where one.parentid=0 and one.course_id=#{courseId}
         order by one.orderby,two.orderby

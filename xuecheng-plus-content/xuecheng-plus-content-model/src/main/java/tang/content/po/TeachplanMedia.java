@@ -46,7 +46,7 @@ public class TeachplanMedia implements Serializable {
     /**
      *
      */
-    @TableField(fill = FieldFill.INSERT)
+//    @TableField(fill = FieldFill.INSERT)
     private Date createDate;
 
     /**
