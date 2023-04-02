@@ -37,7 +37,7 @@ public interface MediaFileService {
      * @return
      */
 
-    UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath);
+    UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath,String objectName);
 
     //使他暴露出去,调用该对象为代理对象,这样可以使 @Transactional有效
     public MediaFiles addMediaFilesToDb(Long companyId,String fileMd5,UploadFileParamsDto uploadFileParamsDto,String bucket,String objectName);
@@ -95,4 +95,10 @@ public interface MediaFileService {
      */
     public boolean addMediaFilesToMinIO(String localFilePath,String mimeType,String bucket, String objectName) ;
 
+    /**
+     * 根据媒资的id查询信息
+     * @param mediaId
+     * @return
+     */
+    MediaFiles getFileById(String mediaId);
 }

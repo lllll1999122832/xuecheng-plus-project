@@ -29,11 +29,23 @@ spring:
           - data-id: logging-${spring.profiles.active}.yaml
             group: xuecheng-plus-common
             refresh: true
+          - data-id: freemarker-config-${spring.profiles.active}.yaml
+            group: xuecheng-plus-common
+            refresh: true
+          - data-id: fegin-${spring.profiles.active}.yaml
+            group: xuecheng-plus-common
+            refresh: true
+#          - data-id: search-${spring.profiles.active}.yaml
+#            group: xuecheng-plus-common
+#            refresh: true
   ##        引入别的配置
         extension-configs:
           - data-id: content-service-${spring.profiles.active}.yaml
             group: xuecheng-plus-project
             refresh: true
+#          - data-id: freemarker-config-${spring.profiles.active}.yaml
+#            group: xuecheng-plus-project
+#            refresh: true
     config:
       override-none: true #本地优先配置
   profiles:

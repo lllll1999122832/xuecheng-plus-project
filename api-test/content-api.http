@@ -37,7 +37,16 @@ Content-Type: application/json
   "description": ""
 }
 ### 根据id查询信息
-GET {{content_host}}/content/course/40
+GET {{gateway_host}}/content/course/40
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2ODAxOTAxODksImF1dGhvcml0aWVzIjpbInAxIl0sImp0aSI6ImMyODAxYTZmLWRlZmItNDIyMi05YjIyLTk5ZGU2MDU0ZmQ2MiIsImNsaWVudF9pZCI6IlhjV2ViQXBwIn0.9I8YWSTzkWGiaFDoM0l2dpoyIn9Yxh8tZV2fRM9O_70
 
 ### 根据id查询课程信息
 GET {{gateway_host}}/content/teachplan/117/tree-nodes
+### 密码模式
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=t1&password=111111
+###校验jwt令牌
+POST {{auth_host}}/auth/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ7XCJjb21wYW55SWRcIjpcIjEyMzIxNDE0MjVcIixcImNyZWF0ZVRpbWVcIjpcIjIwMjItMDktMjhUMDg6MzI6MDNcIixcImlkXCI6XCI1MlwiLFwibmFtZVwiOlwiTeiAgeW4iFwiLFwic2V4XCI6XCIxXCIsXCJzdGF0dXNcIjpcIlwiLFwidXNlcm5hbWVcIjpcInQxXCIsXCJ1dHlwZVwiOlwiMTAxMDAyXCJ9Iiwic2NvcGUiOlsiYWxsIl0sImV4cCI6MTY4MDM2NTQ5MywiYXV0aG9yaXRpZXMiOlsidGVzdCJdLCJqdGkiOiI3N2QxNTA1Ni00NGYyLTRkNWMtYTJjNy1jN2YwM2VkMzBlNTUiLCJjbGllbnRfaWQiOiJYY1dlYkFwcCJ9.yq46kK48RhjgPHr3VOM7V_9OELpxRdNvtESBZ3JL65Y
+
+
+### 密码模式
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username={"username":"stu1","authType":"wx","password":"111111"}

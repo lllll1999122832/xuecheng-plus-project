@@ -1,6 +1,7 @@
 package tang.content.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 import tang.content.po.CoursePublish;
 
 /**
@@ -9,6 +10,7 @@ import tang.content.po.CoursePublish;
 * @createDate 2023-03-19 13:51:41
 * @Entity .CoursePublish
 */
+@Mapper
 public interface CoursePublishMapper extends BaseMapper<CoursePublish> {
 
 }

@@ -139,6 +139,13 @@ public class MediaFileServiceImpl implements MediaFileService {
   }
   return false;
  }
+
+ @Override
+ public MediaFiles getFileById(String mediaId) {
+  MediaFiles mediaFiles = mediaFilesMapper.selectById(mediaId);
+  return mediaFiles;
+ }
+
  //获取文件默认存储目录路径 年/月/日
  private String getDefaultFolderPath() {
   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -156,9 +163,18 @@ public class MediaFileServiceImpl implements MediaFileService {
   }
  }
 
+ /**
+  * 如果纯在objectName就用ObjectName,不存在则自己设置
+  * @param companyId
+  * @param uploadFileParamsDto 参数
+  * @param localFilePath 文件本地路径
+  * @param objectName
+  * @return
+  */
+
  @Override
 // @Transactional //事务控制  minio可能存在网络延迟
- public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath) {
+ public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath,String objectName) {
   //先得到文件名
   String filename = uploadFileParamsDto.getFilename();
   String extension = filename.substring(filename.lastIndexOf("."));
@@ -167,7 +183,10 @@ public class MediaFileServiceImpl implements MediaFileService {
   String defaultFolderPath = getDefaultFolderPath();
   //获取文件的md5值
   String fileMd5 = getFileMd5(new File(localFilePath));
-  String objectName=defaultFolderPath+fileMd5+extension;
+  if(StringUtils.isEmpty(objectName)) {
+   //使用默认的年月日
+   objectName = defaultFolderPath + fileMd5 + extension;
+  }
   //保存进入minio
   boolean result = addMediaFilesToMinIO(localFilePath, mimeType, bucket_Files, objectName);
   //将文件信息保存数据库
@@ -303,6 +322,7 @@ public class MediaFileServiceImpl implements MediaFileService {
     e.printStackTrace();
    }
   //文件不存在
+  System.out.println("文件不存在");
   return RestResponse.success(false);
  }
 

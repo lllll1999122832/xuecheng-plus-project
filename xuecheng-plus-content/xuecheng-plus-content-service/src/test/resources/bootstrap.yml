@@ -27,9 +27,9 @@ spring:
     nacos:
       server-addr: 192.168.101.128:8848
 #      只是配置信息，不需要配置服务发现配置
-#      discovery: #服务注册相关的配置
-#        namespace: a9e78f10-654d-49fd-946f-23fe9d6955b0
-#        group: xuecheng-plus-project
+      discovery: #服务注册相关的配置
+        namespace: b31ce694-f1d6-4e94-a9e3-23967cae5233
+        group: xuecheng-plus-project
       config: #服务注册相关配置
         namespace: b31ce694-f1d6-4e94-a9e3-23967cae5233
         group: xuecheng-plus-project
@@ -40,6 +40,9 @@ spring:
             group: xuecheng-plus-common
             refresh: true
           - data-id: logging-${spring.profiles.active}.yaml
+            group: xuecheng-plus-common
+            refresh: true
+          - data-id: fegin-${spring.profiles.active}.yaml
             group: xuecheng-plus-common
             refresh: true
   profiles:

@@ -1,7 +1,7 @@
 package tang.media.api;
 
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tang.media.model.dto.UploadFileParamsDto;
 import tang.media.model.dto.UploadFileResultDto;
@@ -13,9 +13,6 @@ import tang.media.service.MediaFileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +42,8 @@ public class MediaFilesController {
     @ApiOperation("上传图片")
     @PostMapping(value = "/upload/coursefile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     //说明上传类型为复杂类型
-    public UploadFileResultDto upload(@RequestPart("filedata")MultipartFile filedata) throws IOException {
+    public UploadFileResultDto upload(@RequestPart("filedata")MultipartFile filedata,
+                                      @RequestParam(value= "objectName",required=false) String objectName) throws IOException {
         UploadFileParamsDto uploadFileParamsDto=new UploadFileParamsDto();
         //原始文件的名称
         uploadFileParamsDto.setFilename(filedata.getOriginalFilename());
@@ -63,7 +61,7 @@ public class MediaFilesController {
         Long companyId = 1232141425L;
         //取出文件路径
         String absolutePath = tempFile.getAbsolutePath();
-        return mediaFileService.uploadFile(companyId,uploadFileParamsDto,absolutePath);
+        return mediaFileService.uploadFile(companyId,uploadFileParamsDto,absolutePath,objectName);
     }
 
 }

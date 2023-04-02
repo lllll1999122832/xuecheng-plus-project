@@ -1,0 +1,49 @@
+##server:
+##  servlet:
+##    context-path: /content
+##  port: 63040
+###微服务配置
+##spring:
+##  application:
+##    name: content-api
+##  datasource:
+##    url: jdbc:mysql://192.168.101.128:3306/content?characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+##    username: root
+##    password: 12345
+##    driver-class-name: com.mysql.jdbc.Driver
+## 日志文件配置路径
+##logging:
+##  config: classpath:log4j2-dev.xml
+##swagger:
+##  title: "学成在线内容管理系统"
+##  description: "内容系统管理系统对课程相关信息进行管理"
+##  base-package: tang.xuechengpluscontentapi.content
+##  enabled: true
+##  version: 1.0.0
+#spring:
+#  application:
+#    name: content-service
+#  cloud:
+#    nacos:
+#      server-addr: 192.168.101.128:8848
+##      只是配置信息，不需要配置服务发现配置
+##      discovery: #服务注册相关的配置
+##        namespace: a9e78f10-654d-49fd-946f-23fe9d6955b0
+##        group: xuecheng-plus-project
+#      config: #服务注册相关配置
+#        namespace: b31ce694-f1d6-4e94-a9e3-23967cae5233
+#        group: xuecheng-plus-project
+#        file-extension: yaml
+#        refresh-enabled: true
+#        shared-configs:
+#          - data-id: swagger-${spring.profiles.active}.yaml
+#            group: xuecheng-plus-common
+#            refresh: true
+#          - data-id: logging-${spring.profiles.active}.yaml
+#            group: xuecheng-plus-common
+#            refresh: true
+#          - data-id: fegin-${spring.profiles.active}.yaml
+#            group: xuecheng-plus-common
+#            refresh: true
+#  profiles:
+#    active: dev

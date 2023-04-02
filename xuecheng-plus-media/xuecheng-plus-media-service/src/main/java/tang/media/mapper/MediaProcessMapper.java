@@ -22,7 +22,7 @@ import java.util.List;
 public interface MediaProcessMapper extends BaseMapper<MediaProcess> {
 
     @Select("select * from media_process " +
-            "t where t.id % #{shardTotal}=#{shardIndex} and (t.status=1 or  t.status=3) " +
+            "t where t.id % #{shardTotal}=#{shardIndex} and (t.status=1 or  t.status=3 or t.status=4) " +
             "and t.fail_count<3 limit #{count}")
     List<MediaProcess> selectListByShardIndex(@Param("shardTotal") int shardTotal,
                                               @Param("shardIndex") int shardIndex,

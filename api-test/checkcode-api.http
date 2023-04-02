@@ -1,0 +1,4 @@
+POST {{checkcode_host}}/checkcode/verify?key=checkcode:b2cbc67d05d44db1b6078d3a84591677&code=70dl
+
+### 申请验证码
+POST {{checkcode_host}}/checkcode/pic

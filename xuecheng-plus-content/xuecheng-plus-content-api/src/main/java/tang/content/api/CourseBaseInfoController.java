@@ -4,9 +4,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import tang.content.dto.*;
+import tang.content.utils.SecurityUtil;
 import tang.xuechengplusbase.base.exception.ValidationGroups;
 import tang.xuechengplusbase.base.model.PageParams;
 import tang.xuechengplusbase.base.model.PageResult;
@@ -37,6 +39,10 @@ public class CourseBaseInfoController {
     @ApiOperation("根据id查询课程接口")
     @GetMapping("/course/{courseId}")
     public CourseBaseInfoDto getCourseById(@PathVariable("courseId")Long courseId){
+        //获取当前用户身份
+//        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        SecurityUtil.XcUser user = SecurityUtil.getUser();
+        System.out.println(user);
         return courseBaseService.getCourseById(courseId);
 
     }

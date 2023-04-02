@@ -3,9 +3,7 @@ package tang.content.po;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 /**
@@ -18,9 +16,7 @@ public class CoursePublishPre implements Serializable {
     /**
      * 主键
      */
-    @TableId(type = IdType.AUTO)
     private Long id;
-
     /**
      * 机构ID
      */
@@ -109,6 +105,7 @@ public class CoursePublishPre implements Serializable {
     /**
      * 提交时间
      */
+    @TableField(fill = FieldFill.INSERT)
     private Date createDate;
 
     /**
@@ -134,12 +131,12 @@ public class CoursePublishPre implements Serializable {
     /**
      * 现价
      */
-    private Double price;
+    private Float price;
 
     /**
      * 原价
      */
-    private Double originalPrice;
+    private Float originalPrice;
 
     /**
      * 课程有效期天数
