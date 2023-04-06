@@ -53,7 +53,7 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
     @Autowired
     CourseBaseMapper courseBaseMapper;
     @Override
-    public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto) {
+    public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto,Long companyId) {
         //封装查询条件
         LambdaQueryWrapper<CourseBase>lambdaQueryWrapper=new LambdaQueryWrapper<>();
         //模糊查询输入课程名
@@ -62,6 +62,8 @@ public class CourseBaseServiceImpl extends ServiceImpl<CourseBaseMapper, CourseB
         lambdaQueryWrapper.eq(!StringUtils.isBlank(queryCourseParamsDto.getAuditStatus()),CourseBase::getAuditStatus,queryCourseParamsDto.getAuditStatus());
         //根据课程发布状态查询
         lambdaQueryWrapper.eq(!StringUtils.isBlank(queryCourseParamsDto.getPublishStatus()),CourseBase::getStatus,queryCourseParamsDto.getPublishStatus());
+        //todo 根据培训机构的id拼装查询条件
+        lambdaQueryWrapper.eq(CourseBase::getCompanyId,companyId);
         //进行封页查询
         Page<CourseBase>page=new Page<>(pageParams.getPageNo(),pageParams.getPageSize());
          this.page(page,lambdaQueryWrapper);

@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableFeignClients(basePackages = "tang.ucenter.feignClient")
 public class AuthApplication {
     @Bean
+    //第三方的微信调用,本地微服务使用的fegin
     RestTemplate restTemplate(){
         RestTemplate restTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory());
         return  restTemplate;

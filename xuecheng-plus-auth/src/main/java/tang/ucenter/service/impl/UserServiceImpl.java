@@ -12,12 +12,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import tang.ucenter.mapper.XcMenuMapper;
 import tang.ucenter.mapper.XcUserMapper;
 import tang.ucenter.model.dto.AuthParamsDto;
 import tang.ucenter.model.dto.XcUserExt;
+import tang.ucenter.model.po.XcMenu;
 import tang.ucenter.model.po.XcUser;
 import tang.ucenter.service.AuthService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Component
@@ -27,6 +31,9 @@ public class UserServiceImpl implements UserDetailsService {
     XcUserMapper xcUserMapper;
     @Autowired
     ApplicationContext  applicationContext;
+
+    @Autowired
+    XcMenuMapper xcMenuMapper;
     //传入的请求认证参数就是AuthParamsDto
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -44,6 +51,7 @@ public class UserServiceImpl implements UserDetailsService {
         //调用authService的execute方法认证
         XcUserExt xcUserExt = authService.execute(authParamsDto);
         //封装xcUserExt用户信息为UserDetails
+        //根据UserDetails对象生成令牌
         return getUserPrincipal(xcUserExt);
     }
 
@@ -56,14 +64,26 @@ public class UserServiceImpl implements UserDetailsService {
      */
     public UserDetails getUserPrincipal(XcUserExt user){
         //用户权限,如果不加报Cannot pass a null GrantedAuthority collection
-        String[] authorities = {"p1"};
+        //根据用户id查询查询用户权限
+        String[] authorities = {"test"};
+        List<XcMenu> xcMenus = xcMenuMapper.selectPermissionByUserId(user.getId());
+        List<String>permissions=new ArrayList<>();
+        if(xcMenus.size()>0){
+//            authorities = (String[]) xcMenus.toArray();
+            xcMenus.forEach(m->
+                    permissions.add(m.getCode()));
+            authorities = permissions.toArray(new String[0]);
+        }
         String password = user.getPassword();
         //为了安全在令牌中不放密码
         user.setPassword(null);
+        //将用户权限放在XcUserExt中
+        user.setPermissions(permissions);
         //将user对象转json
         String userString = JSON.toJSONString(user);
+
         //创建UserDetails对象
-        UserDetails userDetails = User.withUsername(userString).password(password ).authorities(authorities).build();
+        UserDetails userDetails = User.withUsername(userString).password(password).authorities(authorities).build();
         return userDetails;
     }
 

@@ -221,7 +221,10 @@ public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, C
             throw new XueChengPlusException(CommonError.UNKOWN_ERROR.getErrMessage());
         }
     }
-
+    public CoursePublish getCoursePublish(Long courseId){
+        CoursePublish coursePublish = coursePublishMapper.selectById(courseId);
+        return coursePublish ;
+    }
 
 }
 

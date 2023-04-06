@@ -1,5 +1,6 @@
 package tang.auth.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import tang.ucenter.mapper.XcUserMapper;
 import tang.ucenter.model.po.XcUser;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ public class LoginController {
     }
 
     @RequestMapping("/r/r1")
+//    @PreAuthorize("hasAuthority('p1')")
     public String r1() {
         return "访问r1资源";
     }

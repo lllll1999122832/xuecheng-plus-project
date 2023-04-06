@@ -17,7 +17,7 @@ import tang.xuechengplusbase.base.model.PageResult;
 */
 public interface CourseBaseService extends IService<CourseBase> {
 
-    PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto);
+    PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto,Long companyId);
 
     CourseBaseInfoDto createCourseBase(Long companyId, AddCourseDto addCourseDto);
 

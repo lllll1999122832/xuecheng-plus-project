@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,9 @@ public class GlobalExceptionHandler {
     public RestErrorResponse customException(Exception e){
         //打印异常
         log.error("出现了异常!{}",e);
+        if (e.getMessage().equals("不允许访问")){
+            return   new RestErrorResponse("你没有权限访问此方法!");
+        }
         //从异常信息中获取提示异常信息封装返回
         return new RestErrorResponse(CommonError.UNKOWN_ERROR.getErrMessage());
     }

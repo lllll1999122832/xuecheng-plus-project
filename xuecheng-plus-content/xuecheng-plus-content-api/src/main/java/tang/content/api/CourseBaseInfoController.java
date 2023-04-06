@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,11 @@ public class CourseBaseInfoController {
     CourseBaseService courseBaseService;
     @PostMapping("/course/list")
     @ApiOperation("课程分页查询接口")
+    @PreAuthorize("hasAuthority('xc_teachmanager_course_list')")
     public PageResult<CourseBase> list(PageParams pageParams, @RequestBody(required = false) QueryCourseParamsDto queryCourseParamsDto){
-        return courseBaseService.queryCourseBaseList(pageParams,queryCourseParamsDto);
+        //获取机构Id
+        Long companyId= Long.valueOf(SecurityUtil.getUser().getCompanyId());
+        return courseBaseService.queryCourseBaseList(pageParams,queryCourseParamsDto,companyId);
     }
     @ApiOperation("新增课程")
     @PostMapping("/course")
@@ -33,7 +37,7 @@ public class CourseBaseInfoController {
       //  @Validate 激活校验可能
         //获取用户的所属的机构id
         // TODO: 2023/3/20 现在还没有认证,暂时设置一个随机
-        Long companyId=1314520L;
+        Long companyId= Long.valueOf(SecurityUtil.getUser().getCompanyId());
         return courseBaseService.createCourseBase(companyId,addCourseDto);
     }
     @ApiOperation("根据id查询课程接口")
@@ -50,7 +54,7 @@ public class CourseBaseInfoController {
     @PutMapping("/course")
     public CourseBaseInfoDto modifyCourse(@RequestBody
                                               @Validated({ValidationGroups.Update.class}) EditCourseDto editCourseDto){
-        Long companyId=1314520L;
+        Long companyId= Long.valueOf(SecurityUtil.getUser().getCompanyId());
         return courseBaseService.modifyCourse(companyId,editCourseDto);
     }
 }

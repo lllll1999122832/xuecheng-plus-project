@@ -138,12 +138,12 @@ public class CoursePublish implements Serializable {
     /**
      * 现价
      */
-    private Double price;
+    private Float price;
 
     /**
      * 原价
      */
-    private Double originalPrice;
+    private Float originalPrice;
 
     /**
      * 课程有效期天数
