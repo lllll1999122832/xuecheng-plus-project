@@ -41,19 +41,20 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
         if (Objects.isNull(coursepublish)) {
             throw new XueChengPlusException("课程不存在!");
         }
+        XcChooseCourse xcChooseCourse;
         String charge = coursepublish.getCharge(); //收费规则
         if (charge.equals("201000")) {
             //如果是免费课程,会向选课记录表和我的课程表写数据
-            XcChooseCourse xcChooseCourse = addFreeCoruse(userId, coursepublish);
+            xcChooseCourse= addFreeCoruse(userId, coursepublish);
             //向我的课表写
             XcCourseTables xcCourseTables = addCourseTabls(xcChooseCourse);
         } else {
             //如果是收费课程,会向选课记录表写数据
-            XcChooseCourse xcChooseCourse = addChargeCoruse(userId, coursepublish);
+            xcChooseCourse = addChargeCoruse(userId, coursepublish);
         }
         //查询学生的学习资格
         XcCourseTablesDto learningStatus = getLearningStatus(userId, courseId);
-        BeanUtils.copyProperties(learningStatus,chooseCourseDto);
+        BeanUtils.copyProperties(xcChooseCourse,chooseCourseDto);
         //设置学习资格状态
         chooseCourseDto.setLearnStatus(learningStatus.getLearnStatus());
         return chooseCourseDto;
