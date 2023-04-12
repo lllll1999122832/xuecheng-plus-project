@@ -112,6 +112,7 @@ public class CoursePublishTask extends MessageProcessAbstract {
             return;
         }
         //取该任务的状态
+
         //任务完成改变任务状态
         mqMessageService.completedStageThree(mqMessage.getId());
     }
