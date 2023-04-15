@@ -2,12 +2,16 @@ package tang.content.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -40,6 +44,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
 * @author 曾梦想仗剑走天涯
@@ -67,6 +75,10 @@ public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, C
     MqMessageService mqMessageService;
     @Autowired
     MediaServiceClient mediaServiceClient;
+    @Autowired
+    RedisTemplate redisTemplate;
+    @Autowired
+    RedissonClient redissonClient;
     @Override
     public CoursePreviewDto getCoursePreviewInfo(Long courseId) {
         CoursePreviewDto coursePreviewDto = new CoursePreviewDto();
@@ -175,10 +187,14 @@ public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, C
         //获取模板
         Configuration configuration = new Configuration(Configuration.getVersion());
         try{
-            //得到路径
-            String path = this.getClass().getResource("/").getPath();
-            //拿到模板的目录
-            configuration.setDirectoryForTemplateLoading(new File(path+"/templates/"));
+//            //得到路径
+//            String path = this.getClass().getResource("/").getPath();
+//            //拿到模板的目录
+//            configuration.setDirectoryForTemplateLoading(new File(path+"/templates/"));
+            //上面那种是考磁盘路径,拿到文件,在linux中会报错
+            //更改为如下方式
+            //通过流的方式拿到模板文件
+            configuration.setTemplateLoader(new ClassTemplateLoader(this.getClass().getClassLoader(),"/templates"));
             //指定编码
             configuration.setDefaultEncoding("utf-8");
             Template template = configuration.getTemplate("course_template.ftl");
@@ -224,6 +240,125 @@ public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, C
     public CoursePublish getCoursePublish(Long courseId){
         CoursePublish coursePublish = coursePublishMapper.selectById(courseId);
         return coursePublish ;
+    }
+
+//    @Override
+//    public CoursePublish getCoursePublishCache(Long courseId) {
+//        //查缓存
+//        Object jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+//        if(!Objects.isNull(jsonObj)){
+//            if(jsonObj.equals("null")){
+//                return null;
+//            }
+//            CoursePublish coursePublish = JSON.parseObject(jsonObj.toString(), CoursePublish.class);
+//            return coursePublish;
+//        }else {
+//            synchronized (this){
+//                jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+//                //再次查一下缓存
+//                if(Objects.isNull(jsonObj)) {
+//                    if (jsonObj.equals("null")) {
+//                        return null;
+//                    }
+//                    CoursePublish coursePublish = JSON.parseObject(jsonObj.toString(), CoursePublish.class);
+//                    return coursePublish;
+//                }
+//                //设置缓存
+//                CoursePublish coursePublish = getCoursePublish(courseId);
+//                //存到redis中
+////        if(!Objects.isNull(coursePublish)) {
+//                redisTemplate.opsForValue().set("course:" + courseId, JSON.toJSONString(coursePublish),30+new Random().nextInt(90)+10, TimeUnit.MINUTES);
+////        }
+//                return coursePublish;
+//            }
+//        }
+//    }
+
+//    /**
+//     * 使用redis的分布式锁来解决问题
+//     * @param courseId
+//     * @return
+//     */
+//    @Override
+//    public CoursePublish getCoursePublishCache(Long courseId) {
+//        //查缓存
+//        Object jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+//
+//        if(!Objects.isNull(jsonObj)){
+//            if(jsonObj.equals("null")){
+//                return null;
+//            }
+//            CoursePublish coursePublish = JSON.parseObject(jsonObj.toString(), CoursePublish.class);
+//            return coursePublish;
+//        }else {
+//            //掉用redis的setnx命令,谁执行成功,谁获取锁
+//            Boolean ifAbsent = redisTemplate.opsForValue().setIfAbsent("getCoursePublishCache", "lock", 30, TimeUnit.MINUTES);
+//            if (ifAbsent){
+//                //设置缓存
+//                CoursePublish coursePublish = getCoursePublish(courseId);
+//                //存到redis中
+//    //        if(!Objects.isNull(coursePublish)) {
+//                redisTemplate.opsForValue().set("course:" + courseId, JSON.toJSONString(coursePublish),30+new Random().nextInt(90)+10, TimeUnit.MINUTES);
+//    //        }
+//                return coursePublish;
+//            }else{
+//                //表示获取锁成功
+//                jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+//             while (Objects.isNull(jsonObj)){
+//                 jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+//             }
+//                    if (jsonObj.equals("null")) {
+//                        return null;
+//                    }
+//                    CoursePublish coursePublish = JSON.parseObject(jsonObj.toString(), CoursePublish.class);
+//                    return coursePublish;
+//                }
+//            }
+//        }
+    /**
+     * 使用redisson的分布式锁来解决问题
+     * @param courseId
+     * @return
+     */
+    @Override
+    public CoursePublish getCoursePublishCache(Long courseId) {
+        //查缓存
+        Object jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+
+        if(!Objects.isNull(jsonObj)){
+            if(jsonObj.equals("null")){
+                return null;
+            }
+            CoursePublish coursePublish = JSON.parseObject(jsonObj.toString(), CoursePublish.class);
+            return coursePublish;
+        }else {
+            //
+            RLock lock = redissonClient.getLock("coursequerylock:" + courseId);
+            //获取分布式锁
+            lock.lock();
+           try {
+//
+                   //表示获取锁成功
+                   jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+                   if(!Objects.isNull(jsonObj)) {
+                       if (jsonObj.equals("null")) {
+                           return null;
+                       } else {
+                           CoursePublish coursePublish = JSON.parseObject(jsonObj.toString(), CoursePublish.class);
+                           return coursePublish;
+                       }
+                   }
+               //从数据库查询
+               CoursePublish coursePublish = getCoursePublish(courseId);
+               //查询完成再存储到redis
+               redisTemplate.opsForValue().set("course:" + courseId, JSON.toJSONString(coursePublish), 300, TimeUnit.SECONDS);
+               return coursePublish;
+           }finally {
+               //手动释放锁
+               lock.unlock();
+           }
+
+        }
     }
 
 }

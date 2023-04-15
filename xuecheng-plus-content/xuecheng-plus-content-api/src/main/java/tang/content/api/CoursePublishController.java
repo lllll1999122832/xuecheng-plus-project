@@ -42,7 +42,7 @@ public class CoursePublishController {
     public CoursePreviewDto getCoursePublish(@PathVariable("courseId") Long courseId) {
         //查询课程发布表
         CoursePreviewDto coursePreviewDto = new CoursePreviewDto();
-        CoursePublish coursePublish = coursePublishService.getCoursePublish(courseId);
+        CoursePublish coursePublish = coursePublishService.getCoursePublishCache(courseId);
         if(Objects.isNull(coursePublish)) {
             return null;
         }
@@ -79,7 +79,7 @@ public class CoursePublishController {
     @GetMapping("/r/coursepublish/{courseId}")
     // /r将来在白名单中配置
     public CoursePublish getCoursepublish(@PathVariable("courseId") Long courseId) {
-        CoursePublish coursePublish = coursePublishService.getCoursePublish(courseId);
+        CoursePublish coursePublish = coursePublishService.getCoursePublishCache(courseId);
         return coursePublish;
     }
 

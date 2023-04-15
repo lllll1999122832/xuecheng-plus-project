@@ -47,4 +47,11 @@ public interface CoursePublishService extends IService<CoursePublish> {
      * @return
      */
     CoursePublish getCoursePublish(Long courseId);
+
+    /**
+     * 白名单数据放入缓存 数据量又比较大的
+     * @param courseId
+     * @return
+     */
+    CoursePublish getCoursePublishCache(Long courseId);
 }
