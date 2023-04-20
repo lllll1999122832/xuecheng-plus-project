@@ -66,11 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().successForwardUrl("/login-success");//登录成功跳转到/login-success
     }
 
-    public static void main(String[] args) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        System.out.println(bCryptPasswordEncoder.encode("12345"));
-        System.out.println(bCryptPasswordEncoder.matches("12345","$2a$10$EvCNDu6INXgdKdbI/1wKpu23FoUHpZvZEbcsUw7IYpuDwXSSGqoZ6"));
-    }
+
 
 
 }

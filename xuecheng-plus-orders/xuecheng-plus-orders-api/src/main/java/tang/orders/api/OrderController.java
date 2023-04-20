@@ -105,7 +105,7 @@ public class OrderController {
     }
 
     @ApiOperation("接收支付结果通知")
-    @PostMapping("/receivenotify")
+    @PostMapping("/paynotify")
     //在支付宝支付完成后,支付宝反馈的支付通知结果
     public void receivenotify(HttpServletRequest request, HttpServletResponse out) throws IOException, AlipayApiException {
         Map<String,String> params = new HashMap<String,String>();

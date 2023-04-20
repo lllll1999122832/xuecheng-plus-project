@@ -48,7 +48,6 @@ public class CourseBaseInfoController {
         SecurityUtil.XcUser user = SecurityUtil.getUser();
         System.out.println(user);
         return courseBaseService.getCourseById(courseId);
-
     }
     @ApiOperation("修改课程信息接口")
     @PutMapping("/course")

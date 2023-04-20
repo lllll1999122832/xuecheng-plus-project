@@ -182,7 +182,7 @@ public class OrderServiceImpl implements OrderService {
         }
         String tradeStatus = payStatusDto.getTrade_status();//支付宝查询到的支付结果
         if(!tradeStatus.equals("TRADE_SUCCESS")){
-            throw new XueChengPlusException("支付为成功!");
+            throw new XueChengPlusException("支付不成功!");
         }
         //更新支付记录表的状态为支付成功
         payRecordByPayno.setStatus("601002");
@@ -220,6 +220,7 @@ public class OrderServiceImpl implements OrderService {
             }else{
                 //发送失败
                 log.debug("发送消息失败:{}",message);
+               int temp=(int) 1e9+1;
             }
         },ex->{
             //发生异常

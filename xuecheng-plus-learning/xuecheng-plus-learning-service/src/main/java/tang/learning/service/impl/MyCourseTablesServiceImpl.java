@@ -115,7 +115,6 @@ public class MyCourseTablesServiceImpl implements MyCourseTablesService {
         LambdaQueryWrapper<XcCourseTables>lambdaQueryWrapper=new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(!Objects.isNull(params.getUserId()),XcCourseTables::getUserId,params.getUserId());
 //                .eq(!Objects.isNull(params.getCourseType()),XcCourseTables::getCourseType,params.getCourseType());
-
         //页码
         int pageNum= params.getPage();
         int pageSize=params.getSize();

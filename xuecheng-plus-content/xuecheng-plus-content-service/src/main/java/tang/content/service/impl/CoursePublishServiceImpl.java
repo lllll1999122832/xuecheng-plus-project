@@ -100,6 +100,7 @@ public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, C
             throw new XueChengPlusException("课程找不到");
         }
         String auditStatus = courseById.getAuditStatus();
+        //一旦对表进行修改,状态就会变化为未提交
         if(auditStatus.equals("202003")){
             throw new XueChengPlusException("课程已提交,请等待");
         }
